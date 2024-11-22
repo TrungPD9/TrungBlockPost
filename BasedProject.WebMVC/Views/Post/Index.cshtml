@@ -1,0 +1,22 @@
+﻿@model List<BasedProject.Models.Models.Post>
+@{
+  
+}
+<h2>All Blog Posts</h2>
+
+<ul class="list-group">
+    @foreach (var post in Model)
+    {
+        <li class="list-group-item">
+            <a asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark">
+                <h4>@post.Title</h4>
+                <p>
+                    <strong>Category:</strong> @post.Category?.Name
+                </p>
+                <p>
+                    <strong>Posted On:</strong> @post.PostedOn.ToString("MM/dd/yyyy")
+                </p>
+            </a>
+        </li>
+    }
+</ul>
