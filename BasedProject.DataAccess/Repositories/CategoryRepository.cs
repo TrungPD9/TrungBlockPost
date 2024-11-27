@@ -13,7 +13,7 @@ namespace BasedProject.DataAccess.Repositories
         private readonly JustBlogContext _context;
         public CategoryRepository(JustBlogContext context)
         {
-            _context = _context;
+            _context = context;
         }
         public void AddCategory(Category category)
         {

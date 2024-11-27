@@ -1,0 +1,26 @@
+﻿@model BasedProject.WebMVC.Models.PostEditViewModel
+
+<form asp-action="Edit" asp-controller="Post" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label for="Title">Title</label>
+        @Html.TextBoxFor(model => model.Post.Title, new { @class = "form-control", @id = "Title" })
+    </div>
+
+    <div class="form-group">
+        <label for="CategoryId">Category</label>
+        @Html.DropDownListFor(
+                 model => model.Post.CategoryId,
+                 new SelectList(Model.Categories, "Id", "Name", Model.Post.CategoryId),
+                 "Select a Category",
+                 new { @class = "form-control", @id = "CategoryId" })
+    </div>
+
+    <div class="form-group">
+        <label for="PostContent">Content</label>
+        @Html.TextAreaFor(model => model.Post.PostContent, new { @class = "form-control", @id = "PostContent", rows = 4 })
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

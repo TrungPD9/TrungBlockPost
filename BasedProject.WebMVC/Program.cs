@@ -5,9 +5,11 @@ using BasedProject.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Get connection string
 var connectionString = builder.Configuration.GetConnectionString("SQLConnection");
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
 // Register DbContext with Scoped lifetime
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<JustBlogContext>(options =>
 
 // Register repositories
 builder.Services.AddScoped<IPostRepository, PostRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 
@@ -26,7 +29,7 @@ using (var scope = app.Services.CreateScope())
     JustBlogInitializer.Initialize(context);
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -40,8 +43,12 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+// Configure routing
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+});
 
 app.Run();
