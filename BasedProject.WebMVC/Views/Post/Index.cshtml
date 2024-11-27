@@ -1,22 +1,62 @@
 ﻿@model List<BasedProject.Models.Models.Post>
-@{
-  
-}
-<h2>All Blog Posts</h2>
 
-<ul class="list-group">
-    @foreach (var post in Model)
-    {
-        <li class="list-group-item">
-            <a asp-action="Details" asp-route-id="@post.Id" class="text-decoration-none text-dark">
-                <h4>@post.Title</h4>
-                <p>
-                    <strong>Category:</strong> @post.Category?.Name
-                </p>
-                <p>
-                    <strong>Posted On:</strong> @post.PostedOn.ToString("MM/dd/yyyy")
-                </p>
-            </a>
-        </li>
+<h2>Danh sách bài viết</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tiêu đề</th>
+            <th>Danh mục</th>
+            <th>Ngày đăng</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in Model)
+        {
+            <tr>
+                <td>@post.Title</td>
+                <td>@post.Category?.Name</td>
+                <td>@post.PostedOn.ToString("yyyy-MM-dd")</td>
+                <td>
+                  
+                    <a class="btn btn-info" asp-action="Details" asp-route-id="@post.Id">Details</a>
+
+                   
+                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@post.Id">Edit</a>
+
+                   
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@post.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+
+<script>
+    function setDetailsModal(title, category, date, content) {
+        document.getElementById('detailsTitle').innerText = title || 'N/A';
+        document.getElementById('detailsCategory').innerText = category || 'N/A';
+        document.getElementById('detailsDate').innerText = date || 'N/A';
+        document.getElementById('detailsContent').innerText = content || 'Không có nội dung.';
     }
-</ul>
+
+    function setEditModal(id, title, categoryId, date, content) {
+        document.getElementById('editId').value = id;
+        document.getElementById('editTitle').value = title;
+        document.getElementById('editCategory').value = categoryId;
+        document.getElementById('editPostedOn').value = date;
+        document.getElementById('editContent').value = content;
+    }
+
+    function setDeleteFormAction(actionUrl) {
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = actionUrl;
+    }
+</script>
+<a asp-action="Create" class="btn btn-primary mt-3">Tạo bài viết mới</a>
+

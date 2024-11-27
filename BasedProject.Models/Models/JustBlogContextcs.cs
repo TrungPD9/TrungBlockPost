@@ -19,15 +19,6 @@ namespace BasedProject.Models.Models
         public DbSet<Tags> Tags { get; set; }
         public DbSet<PostTagMap> PostTagMaps { get; set; }       
         public DbSet<Comment> Comments { get; set; }
-
-        //        protected override void onconfiguring(dbcontextoptionsbuilder optionsbuilder)
-        //        {
-        //            if (!optionsbuilder.isconfigured)
-        //            {
-        //#warning to protect potentially sensitive information in your connection string, you should move it out of source code. you can avoid scaffolding the connection string by using the name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. for more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?linkid=723263.
-        //                optionsbuilder.usesqlserver("server=desktop-v5tvv31\\sqlexpress;database=doan;uid=sa;pwd=12345;integrated security=true;trustservercertificate=true");
-        //            }
-        //        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

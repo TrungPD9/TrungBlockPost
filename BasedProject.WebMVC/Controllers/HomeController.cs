@@ -1,4 +1,6 @@
 ﻿using BasedProject.DataAccess.IRepositories;
+using BasedProject.DataAccess.Repositories;
+using BasedProject.Models.Models;
 using BasedProject.WebMVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,23 +12,22 @@ namespace BasedProject.WebMVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IPostRepository _postRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public HomeController(ILogger<HomeController> logger, IPostRepository postRepository)
+        public HomeController(ILogger<HomeController> logger, IPostRepository postRepository , ICategoryRepository categoryRepository)
         {
             _logger = logger;
             _postRepository = postRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public IActionResult Index()
         {
-            // Lấy danh sách Category từ cơ sở dữ liệu
-/*            var categories = _postRepository.GetAllPosts()
-                .Select(c => new { c.Name, c.UrlSlug })
-                .ToList();*/
+            var post = _postRepository.GetAllPosts().OrderByDescending(p => p.PostedOn).Take(5).ToList();
+            var categories = _categoryRepository.GetAllCategories();
 
-            // Truyền danh sách Category vào ViewBag
-           /* ViewBag.Categories = categories;*/
-            var post = _postRepository.GetAllPosts();
+            // Truyền danh sách categories vào ViewBag
+            ViewBag.Categories = categories;
             return View(post);
         }
 
@@ -56,12 +57,35 @@ namespace BasedProject.WebMVC.Controllers
         }
         public IActionResult SamplePost()
         {
+
             return View();
         }
         public IActionResult Contact()
         {
-            
+          
+
             return View();
+        }
+        public IActionResult PostsByCategory(int id)
+        {
+            // Lấy tên category từ id
+            var category = _categoryRepository.Find(id);
+            if (category == null)
+            {
+                return NotFound(); // Nếu category không tồn tại, trả về NotFound
+            }
+
+            // Truy vấn các bài viết theo tên category
+            var posts = _postRepository.GetPostsByCategory(category.Name);
+            if (!posts.Any())
+            {
+                return NotFound();
+            }
+            var categories = _categoryRepository.GetAllCategories();
+
+            // Truyền danh sách categories vào ViewBag
+            ViewBag.Categories = categories;
+            return View("Index", posts); // Trả về danh sách bài viết
         }
     }
 }
